@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSY-VZ Rechner</title>
+    <title>PSA-VZ Rechner</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Dark Mode Styles */
         :root {
@@ -13,9 +15,13 @@
             --input-border: #ddd;
             --group-bg: #f8f8f8;
             --table-border: #ddd;
-            --button-bg: #add8e6;
+            --button-bg: #a7c4bc;
             --button-text: #333;
-            --button-hover: #89c3d6;
+            --button-hover: #90b1a7;
+            /* Farbpaletten */
+            --psa-color: #90b1a7;
+            --vz-color: #d689a2;
+            --gd-color: #a8dadc;
         }
 
         [data-theme="dark"] {
@@ -25,21 +31,49 @@
             --input-border: #555;
             --group-bg: #2a2a2a;
             --table-border: #444;
-            --button-bg: #1e4d5c;
+            --button-bg: #4a6e5a;
             --button-text: #fff;
-            --button-hover: #2a6475;
+            --button-hover: #5c8a6d;
+        }
+
+        /* Contrast Mode */
+        [data-color-mode="contrast"] {
+            --psa-color: #f0ad4e;
+            --vz-color: #c93060;
+            --button-bg: #9967eb;
+            --button-hover: #8942f4;
+            --gd-color: #5cb85c;
+        }
+
+        /* Warm Mode */
+        [data-color-mode="warm"] {
+            --psa-color: #f2b499;
+            --vz-color: #e67a5c;
+            --button-bg: #e05a35;
+            --button-hover: #c44d2b;
+            --gd-color: #f79d79;
+        }
+
+        /* Cold Mode */
+        [data-color-mode="cold"] {
+            --psa-color: #bde2e6;
+            --vz-color: #54bac6;
+            --button-bg: #41a7b5;
+            --button-hover: #358692;
+            --gd-color: #9ad5de;
         }
 
         body {
             font-family: Arial, sans-serif;
-            max-width: 1200px;  /* Erhöht für den breiteren Graphen */
+            max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-            text-align: center;  /* Zentriert den Inhalt */
+            text-align: center;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin-top: 60px;  /* Platz für die Navbar */
+            margin-top: 60px;
         }
+
         .input-container {
             display: flex;
             justify-content: center;
@@ -51,7 +85,7 @@
             background-color: var(--group-bg);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             flex: 1;
             max-width: 300px;
         }
@@ -75,16 +109,19 @@
             border-bottom: 2px solid #add8e6;
             padding-bottom: 5px;
         }
+
         h1 {
             color: var(--text-color);
             margin-bottom: 30px;
             font-size: 28px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
+
         label {
             display: block;
             margin-bottom: 5px;
         }
+
         input {
             padding: 5px;
             width: 200px;
@@ -92,6 +129,7 @@
             border: 1px solid var(--input-border);
             color: var(--text-color);
         }
+
         button {
             padding: 10px 20px;
             background-color: var(--button-bg);
@@ -103,15 +141,18 @@
             font-size: 16px;
             transition: background-color 0.3s;
         }
+
         button:hover {
             background-color: var(--button-hover);
         }
+
         .button-container {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin: 15px 0;
         }
+
         #ergebnis {
             margin-top: 20px;
             padding: 10px;
@@ -119,8 +160,9 @@
             background-color: var(--group-bg);
             color: var(--text-color);
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .graph-container {
             width: 1200px;
             margin: 30px auto;
@@ -128,30 +170,37 @@
             justify-content: center;
             align-items: center;
         }
+
         input[type="text"] {
             width: 200px;
             padding: 5px;
             margin-bottom: 10px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid var(--table-border);
             padding: 8px;
             background-color: var(--group-bg);
         }
+
         th {
             background-color: #add8e6;
             color: #333;
         }
+
         td small {
             color: #666;
             display: block;
             margin-top: 3px;
         }
+
         td input[type="date"],
         td input[type="number"],
         td input[type="text"] {
@@ -221,11 +270,11 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: var(--button-bg);
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(26px);
         }
 
@@ -244,7 +293,7 @@
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s;
-            text-decoration: none;  /* Entfernt die Unterstreichung des Links */
+            text-decoration: none;
         }
 
         .help-button:hover {
@@ -262,11 +311,11 @@
             justify-content: flex-end;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
 
-        .navbar button, 
+        .navbar button,
         .navbar .help-button {
             padding: 8px 15px;
             background-color: var(--button-bg);
@@ -279,29 +328,35 @@
             text-decoration: none;
         }
 
-        .navbar button:hover, 
+        .navbar button:hover,
         .navbar .help-button:hover {
             background-color: var(--button-hover);
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <nav class="navbar">
+        <select id="colorModeSelect" onchange="setColorMode(this.value)">
+            <option value="default">Standard</option>
+            <option value="contrast">Kontrastreich</option>
+            <option value="warm">Warm</option>
+            <option value="cold">Kalt</option>
+        </select>
         <input type="file" id="dateiInput" style="display: none;" onchange="dateiLaden(this)">
         <button onclick="document.getElementById('dateiInput').click()">Laden</button>
         <button onclick="speichernDaten()">Speichern</button>
         <a href="erklärung.html" target="_blank" class="help-button">Erklärung</a>
         <div class="theme-switch-wrapper">
             <label class="theme-switch" for="checkbox">
-                <input type="checkbox" id="checkbox" />
+                <input type="checkbox" id="checkbox">
                 <div class="slider"></div>
             </label>
         </div>
     </nav>
 
-    <h1>PSA Verdopplungszeitrechner</h1>
-    
+    <h1>PSA Verdopplungszeitrechner V 0.5</h1>
+
     <div class="input-container">
         <div class="input-group-column">
             <div class="column-title">Patientendaten</div>
@@ -325,16 +380,14 @@
 
         <div class="input-group-column">
             <div class="column-title">Erste Messung</div>
-    <div class="input-group">
-        <label for="datum1">Erstes Datum:</label>
-        <input type="date" id="datum1" required>
-    </div>
-
-    <div class="input-group">
+            <div class="input-group">
+                <label for="datum1">Erstes Datum:</label>
+                <input type="date" id="datum1" required>
+            </div>
+            <div class="input-group">
                 <label for="wert1">Erster PSA-Wert:</label>
-        <input type="number" id="wert1" step="0.01" required>
-    </div>
-
+                <input type="number" id="wert1" step="0.01" required>
+            </div>
             <div class="input-group">
                 <label for="notiz1">Notiz:</label>
                 <input type="text" id="notiz1" placeholder="Stichwörter zur ersten Messung">
@@ -343,16 +396,14 @@
 
         <div class="input-group-column">
             <div class="column-title">Zweite Messung</div>
-    <div class="input-group">
-        <label for="datum2">Zweites Datum:</label>
-        <input type="date" id="datum2" required>
-    </div>
-
-    <div class="input-group">
-                <label for="wert2">Zweiter PSA-Wert:</label>
-        <input type="number" id="wert2" step="0.01" required>
+            <div class="input-group">
+                <label for="datum2">Zweites Datum:</label>
+                <input type="date" id="datum2" required>
             </div>
-
+            <div class="input-group">
+                <label for="wert2">Zweiter PSA-Wert:</label>
+                <input type="number" id="wert2" step="0.01" required>
+            </div>
             <div class="input-group">
                 <label for="notiz2">Notiz:</label>
                 <input type="text" id="notiz2" placeholder="Stichwörter zur zweiten Messung">
@@ -361,55 +412,47 @@
     </div>
 
     <div class="button-container">
-    <button onclick="berechneVerdopplungszeit()">Berechnen</button>
+        <button onclick="berechneVerdopplungszeit()">Berechnen</button>
     </div>
 
     <div id="ergebnis">
         <strong>Verdopplungszeit in Monaten:</strong> <span id="verdopplungszeit">-</span>
     </div>
 
+    <div class="graph-container">
+        <canvas id="kombinierterGraph"></canvas>
+    </div>
+
     <div class="table-container" style="margin-top: 20px;">
         <table id="werteTabelle" style="width: 100%; border-collapse: collapse; margin: 10px 0;">
             <thead>
                 <tr>
-                    <th style="border: 1px solid #ddd; padding: 8px;">Datum 1</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">PSA Wert 1</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">Datum 2</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">PSA Wert 2</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">Verdopplungszeit (Monate)</th>
+                    <th>Datum 1</th>
+                    <th>PSA Wert 1</th>
+                    <th>Datum 2</th>
+                    <th>PSA Wert 2</th>
+                    <th>Verdopplungszeit (Monate)</th>
                 </tr>
             </thead>
-            <tbody id="werteTabellebody">
-            </tbody>
+            <tbody id="werteTabellebody"></tbody>
         </table>
-    </div>
-
-    <div class="graph-container">
-        <canvas id="kombinierterGraph"></canvas>
     </div>
 
     <script>
         let messungen = [];
         let kombinierterChart;
+        const GLEITENDER_DURCHSCHNITT_ANZAHL = 3;
 
         function berechneVerdopplungszeit() {
-            // Werte aus den Eingabefeldern holen
             const datum1 = new Date(document.getElementById('datum1').value);
             const datum2 = new Date(document.getElementById('datum2').value);
             const wert1 = parseFloat(document.getElementById('wert1').value);
             const wert2 = parseFloat(document.getElementById('wert2').value);
 
-            // Zeitdifferenz in Monaten berechnen
-            const diffMonate = (datum2.getFullYear() - datum1.getFullYear()) * 12 
-                            + (datum2.getMonth() - datum1.getMonth());
-
-            // Wachstumsrate berechnen
+            const diffMonate = (datum2.getFullYear() - datum1.getFullYear()) * 12 + (datum2.getMonth() - datum1.getMonth());
             const rate = Math.log(wert2 / wert1) / diffMonate;
-
-            // Verdopplungszeit in Monaten berechnen
             const verdopplungszeit = Math.log(2) / rate;
 
-            // Neue Messung zur Tabelle hinzufügen
             const messung = {
                 datum1: document.getElementById('datum1').value,
                 wert1: wert1,
@@ -419,11 +462,9 @@
                 notiz2: document.getElementById('notiz2').value,
                 verdopplungszeit: verdopplungszeit.toFixed(2)
             };
-            
+
             messungen.push(messung);
             aktualisiereTabelle();
-
-            // Ergebnis anzeigen
             document.getElementById('verdopplungszeit').textContent = verdopplungszeit.toFixed(2);
         }
 
@@ -440,23 +481,19 @@
         function formatiereDatumFuerDateiname(datum) {
             if (!datum) return '';
             const d = new Date(datum);
-            return d.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+            return d.toISOString().split('T')[0];
         }
 
         function erstelleDateiname() {
             const vorname = document.getElementById('vorname').value.trim() || 'Unbekannt';
             const nachname = document.getElementById('nachname').value.trim() || 'Unbekannt';
             const geburtsdatum = formatiereDatumFuerDateiname(document.getElementById('geburtsdatum').value);
-            
-            // Entferne ungültige Dateinamenzeichen und ersetze Leerzeichen durch Unterstriche
             const sichererVorname = vorname.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_');
             const sichererNachname = nachname.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_');
-            
             let dateiname = `${sichererVorname}_${sichererNachname}`;
             if (geburtsdatum) {
                 dateiname += `_${geburtsdatum}`;
             }
-            
             return dateiname + '.json';
         }
 
@@ -470,9 +507,11 @@
                 },
                 messungen: messungen
             };
-            
+
             const datenJSON = JSON.stringify(daten, null, 2);
-            const blob = new Blob([datenJSON], { type: 'application/json' });
+            const blob = new Blob([datenJSON], {
+                type: 'application/json'
+            });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -487,16 +526,12 @@
             const datei = input.files[0];
             if (datei) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     try {
                         const daten = JSON.parse(e.target.result);
-                        
-                        // Prüfe, ob es sich um das alte oder neue Format handelt
                         if (Array.isArray(daten)) {
-                            // Altes Format - nur Messungen
                             messungen = daten;
                         } else {
-                            // Neues Format - mit Patientendaten
                             if (daten.patient) {
                                 document.getElementById('vorname').value = daten.patient.vorname || '';
                                 document.getElementById('nachname').value = daten.patient.nachname || '';
@@ -505,7 +540,6 @@
                             }
                             messungen = daten.messungen || [];
                         }
-
                         aktualisiereTabelle();
                         if (kombinierterChart) {
                             kombinierterChart.options.plugins.title.text = erstellePatientenLegende();
@@ -524,68 +558,48 @@
         function aktualisiereTabelle() {
             const tbody = document.getElementById('werteTabellebody');
             tbody.innerHTML = '';
-            
+
             messungen.forEach((messung, index) => {
                 const row = tbody.insertRow();
                 row.innerHTML = `
-                    <td style="border: 1px solid var(--table-border); padding: 8px;">
-                        <input type="date" value="${messung.datum1}" onchange="updateMessung(${index}, 'datum1', this.value)">
-                        <input type="text" value="${messung.notiz1 || ''}" 
-                               placeholder="Notiz" 
-                               onchange="updateMessung(${index}, 'notiz1', this.value)"
-                               style="width: 100%; margin-top: 3px;">
-                    </td>
-                    <td style="border: 1px solid var(--table-border); padding: 8px; text-align: right;">
-                        <input type="number" value="${messung.wert1}" 
-                               step="0.01" 
-                               onchange="updateMessung(${index}, 'wert1', this.value)"
-                               style="text-align: right; width: 100px;">
-                    </td>
-                    <td style="border: 1px solid var(--table-border); padding: 8px;">
-                        <input type="date" value="${messung.datum2}" onchange="updateMessung(${index}, 'datum2', this.value)">
-                        <input type="text" value="${messung.notiz2 || ''}" 
-                               placeholder="Notiz" 
-                               onchange="updateMessung(${index}, 'notiz2', this.value)"
-                               style="width: 100%; margin-top: 3px;">
-                    </td>
-                    <td style="border: 1px solid var(--table-border); padding: 8px; text-align: right;">
-                        <input type="number" value="${messung.wert2}" 
-                               step="0.01" 
-                               onchange="updateMessung(${index}, 'wert2', this.value)"
-                               style="text-align: right; width: 100px;">
-                    </td>
-                    <td style="border: 1px solid var(--table-border); padding: 8px; text-align: center;">
-                        <strong>${messung.verdopplungszeit}</strong>
-                        <button onclick="loescheMessung(${index})" 
-                                style="float: right; margin-left: 5px; padding: 2px 5px; background-color: #ff4444;">
-                            ×
-                        </button>
-                    </td>
-                `;
+          <td style="border: 1px solid var(--table-border); padding: 8px;">
+           <input type="date" value="${messung.datum1}" onchange="updateMessung(${index}, 'datum1', this.value)">
+           <input type="text" value="${messung.notiz1 || ''}" placeholder="Notiz" onchange="updateMessung(${index}, 'notiz1', this.value)" style="width: 100%; margin-top: 3px;">
+          </td>
+          <td style="border: 1px solid var(--table-border); padding: 8px; text-align: right;">
+           <input type="number" value="${messung.wert1}" step="0.01" onchange="updateMessung(${index}, 'wert1', this.value)" style="text-align: right; width: 100px;">
+          </td>
+          <td style="border: 1px solid var(--table-border); padding: 8px;">
+           <input type="date" value="${messung.datum2}" onchange="updateMessung(${index}, 'datum2', this.value)">
+           <input type="text" value="${messung.notiz2 || ''}" placeholder="Notiz" onchange="updateMessung(${index}, 'notiz2', this.value)" style="width: 100%; margin-top: 3px;">
+          </td>
+          <td style="border: 1px solid var(--table-border); padding: 8px; text-align: right;">
+           <input type="number" value="${messung.wert2}" step="0.01" onchange="updateMessung(${index}, 'wert2', this.value)" style="text-align: right; width: 100px;">
+          </td>
+          <td style="border: 1px solid var(--table-border); padding: 8px; text-align: center;">
+           <strong>${messung.verdopplungszeit}</strong>
+           <button onclick="loescheMessung(${index})" style="float: right; margin-left: 5px; padding: 2px 5px; background-color: #ff4444;">×</button>
+          </td>
+         `;
             });
             aktualisiereGraph();
+            aktualisiereChartFarben(); //Farben aktualisieren nach Tabellen Update
         }
 
         function updateMessung(index, feld, wert) {
-            // Aktualisiere den Wert im messungen Array
             messungen[index][feld] = feld.includes('wert') ? parseFloat(wert) : wert;
-            
-            // Neuberechnung der Verdopplungszeit
             const messung = messungen[index];
             const datum1 = new Date(messung.datum1);
             const datum2 = new Date(messung.datum2);
             const wert1 = parseFloat(messung.wert1);
             const wert2 = parseFloat(messung.wert2);
 
-            // Prüfe ob alle notwendigen Werte vorhanden sind
             if (!isNaN(wert1) && !isNaN(wert2) && datum1 && datum2) {
-                const diffMonate = (datum2.getFullYear() - datum1.getFullYear()) * 12 
-                                + (datum2.getMonth() - datum1.getMonth());
+                const diffMonate = (datum2.getFullYear() - datum1.getFullYear()) * 12 + (datum2.getMonth() - datum1.getMonth());
                 const rate = Math.log(wert2 / wert1) / diffMonate;
                 const verdopplungszeit = Math.log(2) / rate;
                 messung.verdopplungszeit = verdopplungszeit.toFixed(2);
             }
-
             aktualisiereTabelle();
         }
 
@@ -596,10 +610,29 @@
             }
         }
 
+        function berechneGleitendenDurchschnitt(daten) {
+            const anzahl = GLEITENDER_DURCHSCHNITT_ANZAHL;
+            let gleitenderDurchschnitt = [];
+            for (let i = anzahl - 1; i < daten.length; i++) {
+                let summe = 0;
+                let anzahlWerte = 0;
+                for (let j = i; j > i - anzahl; j--) {
+                    if (daten[j].verdopplungszeit !== null) {
+                        summe += parseFloat(daten[j].verdopplungszeit);
+                        anzahlWerte++;
+                    }
+                }
+                gleitenderDurchschnitt.push({
+                    datum: daten[i].datum,
+                    wert: anzahlWerte > 0 ? summe / anzahlWerte : null
+                });
+            }
+            return gleitenderDurchschnitt;
+        }
+
         function aktualisiereGraph() {
             let allePSADaten = [];
-            
-            // Füge nur den ersten PSA-Wert der ersten Messung hinzu
+
             if (messungen.length > 0) {
                 allePSADaten.push({
                     datum: messungen[0].datum1,
@@ -610,7 +643,6 @@
                 });
             }
 
-            // Füge alle zweiten Werte hinzu
             messungen.forEach(m => {
                 allePSADaten.push({
                     datum: m.datum2,
@@ -621,209 +653,238 @@
                 });
             });
 
-            // Sortiere nach Datum
             allePSADaten.sort((a, b) => new Date(a.datum) - new Date(b.datum));
+            const gleitenderDurchschnitt = berechneGleitendenDurchschnitt(allePSADaten);
 
-            // Update Chart
-            kombinierterChart.data.labels = allePSADaten.map(d => formatiereDatum(d.datum));
-            kombinierterChart.data.datasets[0].data = allePSADaten.map(d => d.psa);
-            kombinierterChart.data.datasets[1].data = allePSADaten.map(d => 
-                d.isZweitesdatum ? d.verdopplungszeit : null
-            );
-            
-            // Speichere die Daten für Tooltip-Zugriff
-            kombinierterChart.psaDaten = allePSADaten;
-            
-            kombinierterChart.update();
+            const chartData = {
+                labels: allePSADaten.map(d => formatiereDatum(d.datum)),
+                datasets: [{
+                        label: 'PSA-Werte',
+                        data: allePSADaten.map(d => d.psa),
+                        borderColor: 'var(--psa-color)',
+                        backgroundColor: 'var(--psa-color)',
+                        tension: 0.4,
+                        yAxisID: 'y-psa'
+                    },
+                    {
+                        label: 'Verdopplungszeit',
+                        data: allePSADaten.map(d => d.isZweitesdatum ? d.verdopplungszeit : null),
+                        borderColor: 'var(--vz-color)',
+                        tension: 0.4,
+                        yAxisID: 'y-vz',
+                        spanGaps: true
+                    },
+                    {
+                        label: `Gleitender Durchschnitt VZ (${GLEITENDER_DURCHSCHNITT_ANZAHL})`,
+                        data: allePSADaten.map(d => {
+                            const punkt = gleitenderDurchschnitt.find(gd => gd.datum === d.datum);
+                            return punkt ? punkt.wert : null;
+                        }),
+                        borderColor: 'var(--gd-color)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: false,
+                        tension: 0.4,
+                        yAxisID: 'y-vz',
+                        spanGaps: true
+                    }
+                ]
+            };
+
+            const chartOptions = {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: erstellePatientenLegende(),
+                        font: {
+                            size: 14
+                        },
+                        padding: {
+                            bottom: 10
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function (tooltipItems) {
+                                return kombinierterChart.data.labels[tooltipItems[0].dataIndex];
+                            },
+                            label: function (context) {
+                                let label = context.dataset.label + ': ';
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(2);
+                                } else {
+                                    label += 'Keine Daten';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    'y-psa': {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'PSA-Wert'
+                        },
+                        grid: {
+                            color: 'var(--table-border)'
+                        }
+                    },
+                    'y-vz': {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Verdopplungszeit (Monate)'
+                        },
+                        grid: {
+                            color: 'var(--table-border)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Datum'
+                        },
+                        grid: {
+                            color: 'var(--table-border)'
+                        }
+                    }
+                }
+            };
+
+            const ctx = document.getElementById('kombinierterGraph').getContext('2d');
+            if (kombinierterChart) {
+                kombinierterChart.destroy();
+            }
+            kombinierterChart = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: chartOptions
+            });
+            aktualisiereChartFarben();
         }
 
-        // Dark Mode Toggle Funktionalität
+          function setColorMode(mode) {
+            document.documentElement.setAttribute('data-color-mode', mode);
+            localStorage.setItem('colorMode', mode);
+            aktualisiereChartFarben();
+        }
+
+        // Dark Mode
         const toggleSwitch = document.querySelector('#checkbox');
-        const currentTheme = localStorage.getItem('theme');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+         const savedColorMode = localStorage.getItem('colorMode') || 'default';
 
         if (currentTheme) {
             document.documentElement.setAttribute('data-theme', currentTheme);
-            if (currentTheme === 'dark') {
-                toggleSwitch.checked = true;
-            }
+            toggleSwitch.checked = currentTheme === 'dark';
         }
+         setColorMode(savedColorMode);
+         document.getElementById('colorModeSelect').value = savedColorMode;
 
         function switchTheme(e) {
-            if (e.target.checked) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                updateChartColors('dark');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-                updateChartColors('light');
-            }
+            const theme = e.target.checked ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            aktualisiereChartFarben();
         }
 
         toggleSwitch.addEventListener('change', switchTheme, false);
 
-        // Funktion zum Aktualisieren der Chart-Farben
-        function updateChartColors(theme) {
+        function aktualisiereChartFarben() {
             if (!kombinierterChart) return;
 
-            const psaColor = theme === 'dark' ? '#add8e6' : '#add8e6';
-            const vzColor = theme === 'dark' ? '#ff6b81' : 'rgb(255, 99, 132)';
-            
+            const theme = localStorage.getItem('theme') || 'light';
+            const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--table-border');
+            const psaColor = getComputedStyle(document.documentElement).getPropertyValue('--psa-color');
+            const vzColor = getComputedStyle(document.documentElement).getPropertyValue('--vz-color');
+            const buttonBg = getComputedStyle(document.documentElement).getPropertyValue('--button-bg');
+            const buttonHover = getComputedStyle(document.documentElement).getPropertyValue('--button-hover');
+            const gdColor = getComputedStyle(document.documentElement).getPropertyValue('--gd-color');
+
+            kombinierterChart.options.scales['y-psa'].grid.color = gridColor;
+            kombinierterChart.options.scales['y-vz'].grid.color = gridColor;
+            kombinierterChart.options.scales['x'].grid.color = gridColor;
+
             kombinierterChart.data.datasets[0].borderColor = psaColor;
             kombinierterChart.data.datasets[0].backgroundColor = psaColor;
             kombinierterChart.data.datasets[1].borderColor = vzColor;
-            
-            kombinierterChart.options.scales['y-psa'].grid.color = theme === 'dark' ? '#444' : '#ddd';
-            kombinierterChart.options.scales['y-vz'].grid.color = theme === 'dark' ? '#444' : '#ddd';
-            kombinierterChart.options.scales.x.grid.color = theme === 'dark' ? '#444' : '#ddd';
-            
+            kombinierterChart.data.datasets[2].borderColor = gdColor;
+
+             const elements = document.querySelectorAll('.navbar button, .navbar .help-button')
+             elements.forEach(element => {
+                element.style.backgroundColor = buttonBg;
+        element.addEventListener('mouseover', function() {
+            this.style.backgroundColor = buttonHover;
+        });
+        element.addEventListener('mouseout', function() {
+            this.style.backgroundColor = buttonBg;
+        });
+             })
+
             kombinierterChart.update();
         }
 
-        function initialisiereGraph() {
-            const ctx = document.getElementById('kombinierterGraph').getContext('2d');
-
-            kombinierterChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [
-                        {
-                            label: 'PSA-Werte',
-                            data: [],
-                            borderColor: '#add8e6',
-                            backgroundColor: '#add8e6',
-                            tension: 0.1,
-                            pointRadius: 5,
-                            pointHoverRadius: 8,
-                            yAxisID: 'y-psa'
-                        },
-                        {
-                            label: 'Verdopplungszeit',
-                            data: [],
-                            borderColor: 'rgb(255, 99, 132)',
-                            tension: 0.1,
-                            pointRadius: 5,
-                            pointHoverRadius: 8,
-                            yAxisID: 'y-vz',
-                            spanGaps: true
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: erstellePatientenLegende(),
-                            font: {
-                                size: 14
-                            },
-                            padding: {
-                                bottom: 10
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    return formatiereDatum(kombinierterChart.psaDaten[tooltipItems[0].dataIndex].datum);
-                                },
-                                label: function(context) {
-                                    if (context.datasetIndex === 0) {
-                                        const dataPoint = kombinierterChart.psaDaten[context.dataIndex];
-                                        const labels = [];
-                                        
-                                        labels.push(`PSA: ${dataPoint.psa.toFixed(2)}`);
-                                        
-                                        if (dataPoint.isZweitesdatum && dataPoint.verdopplungszeit !== null) {
-                                            labels.push(`Verdopplungszeit: ${dataPoint.verdopplungszeit.toFixed(2)} Monate`);
-                                        }
-                                        
-                                        if (dataPoint.notiz) {
-                                            labels.push(`Bemerkung: ${dataPoint.notiz}`);
-                                        }
-                                        
-                                        return labels;
-                                    }
-                                    return null;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        'y-psa': {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: 'PSA-Wert'
-                            }
-                        },
-                        'y-vz': {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: 'Verdopplungszeit (Monate)'
-                            },
-                            grid: {
-                                drawOnChartArea: false
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Datum'
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Initialisiere die Farben basierend auf dem aktuellen Theme
-            updateChartColors(localStorage.getItem('theme') || 'light');
-        }
-
-        // Initialisiere den Graph beim Laden der Seite
-        window.onload = function() {
-            initialisiereGraph();
-        };
-
-        // Funktion zum Erstellen der Patienteninfo-Legende
         function erstellePatientenLegende() {
             const vorname = document.getElementById('vorname').value;
             const nachname = document.getElementById('nachname').value;
             const geburtsdatum = formatiereDatum(document.getElementById('geburtsdatum').value);
             const opDatum = formatiereDatum(document.getElementById('opDatum').value);
-            
-            let legende = '';
-            if (vorname || nachname) {
-                legende += `${vorname} ${nachname}`;
-            }
-            if (geburtsdatum) {
-                legende += ` (geb. ${geburtsdatum})`;
-            }
-            if (opDatum) {
-                legende += ` - OP: ${opDatum}`;
-            }
-            return legende;
+            return `${vorname} ${nachname} (geb. ${geburtsdatum}) - OP: ${opDatum}`;
         }
 
-        // Aktualisiere den Graphen wenn sich Patientendaten ändern
         ['vorname', 'nachname', 'geburtsdatum', 'opDatum'].forEach(id => {
-            document.getElementById(id).addEventListener('change', function() {
+            document.getElementById(id).addEventListener('change', function () {
                 if (kombinierterChart) {
                     kombinierterChart.options.plugins.title.text = erstellePatientenLegende();
                     kombinierterChart.update();
                 }
             });
         });
+
+        function ladeStandardDaten() {
+            fetch('default.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('default.json nicht gefunden oder fehlerhaft.');
+                    }
+                    return response.json();
+                })
+                .then(daten => {
+                    if (daten.patient) {
+                        document.getElementById('vorname').value = daten.patient.vorname || '';
+                        document.getElementById('nachname').value = daten.patient.nachname || '';
+                        document.getElementById('geburtsdatum').value = daten.patient.geburtsdatum || '';
+                        document.getElementById('opDatum').value = daten.patient.opDatum || '';
+                    }
+                    messungen = daten.messungen || [];
+                    aktualisiereTabelle();
+                })
+                .catch(error => {
+                    console.warn('Keine Standarddaten gefunden, starte leere Anwendung.', error.message);
+                    // Fallback: Initialisiere leeren Graphen, wenn keine Standarddaten da sind.
+                    initialisiereGraph();
+                });
+        }
+
+        window.onload = function () {
+            ladeStandardDaten();
+        };
+
+        function initialisiereGraph() {
+            aktualisiereGraph();
+            aktualisiereChartFarben();
+        }
     </script>
 </body>
+
 </html>

@@ -1,261 +1,192 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSA Verdopplungszeitrechner - Dokumentation</title>
+    <title>Erklärung - PSA-VZ Rechner</title>
     <style>
-        :root {
-            --bg-color: #f5f5f5;
-            --text-color: #333;
-            --border-color: #ddd;
-            --highlight-bg: #f8f8f8;
-            --link-color: #0066cc;
-            --code-bg: #f4f4f4;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #1a1a1a;
-            --text-color: #fff;
-            --border-color: #444;
-            --highlight-bg: #2a2a2a;
-            --link-color: #66b3ff;
-            --code-bg: #2d2d2d;
-        }
-
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            color: #333;
             line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
         }
 
         h1 {
-            color: var(--text-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        h2 {
-            color: var(--text-color);
-            margin-top: 30px;
-            border-bottom: 1px solid var(--border-color);
+            color: #4472C4;
+            border-bottom: 2px solid #4472C4;
             padding-bottom: 5px;
         }
 
-        h3 {
-            color: var(--text-color);
-            margin-top: 20px;
+        h2 {
+            color: #5B9BD5;
         }
 
-        ul, ol {
-            padding-left: 20px;
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        ul,
+        ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
         }
 
         li {
             margin-bottom: 8px;
         }
 
-        code {
-            background-color: var(--code-bg);
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-family: monospace;
+        strong {
+            font-weight: bold;
         }
 
-        .section {
-            background-color: var(--highlight-bg);
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        em {
+            font-style: italic;
         }
 
-        .theme-switch-wrapper {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .theme-switch {
-            display: inline-block;
-            height: 34px;
-            width: 60px;
-            position: relative;
-        }
-
-        .theme-switch input {
-            display: none;
-        }
-
-        .slider {
-            background-color: #ccc;
-            bottom: 0;
-            cursor: pointer;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            background-color: #fff;
-            bottom: 4px;
-            content: "";
-            height: 26px;
-            left: 4px;
-            position: absolute;
-            transition: .4s;
-            width: 26px;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: #66b3ff;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
+        /* Zusätzliche Hinweise */
+        .hinweis {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.9em;
         }
     </style>
 </head>
+
 <body>
-    <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
-            <div class="slider"></div>
-        </label>
-    </div>
+    <h1>Erklärung - PSA Verdopplungszeitrechner</h1>
 
-    <h1>PSA Verdopplungszeitrechner - Dokumentation</h1>
+    <section>
+        <h2>Was ist die PSA-Verdopplungszeit?</h2>
+        <p>Die PSA-Verdopplungszeit (PSA-VZ) ist ein Maß dafür, wie schnell der PSA-Wert (Prostata-spezifisches Antigen) im Blut ansteigt. Sie wird in Monaten angegeben und ist ein wichtiger Faktor bei der Beurteilung des Risikos und des Verlaufs von Prostatakrebs, insbesondere nach einer Behandlung wie Operation oder Bestrahlung.</p>
+        <p>Eine kurze PSA-VZ kann auf ein aggressiveres Wachstum des Krebses hindeuten, während eine lange PSA-VZ oft mit einem langsameren Wachstum verbunden ist.</p>
+    </section>
 
-    <div class="section">
-        <h2>Überblick</h2>
-        <p>Der PSA Verdopplungszeitrechner ist ein Tool zur Berechnung und Visualisierung von PSA-Werten und deren Verdopplungszeiten.</p>
-    </div>
+    <section>
+        <h2>Wie funktioniert der Rechner?</h2>
+        <p>Dieser Rechner verwendet mindestens zwei PSA-Messwerte, um die Zeit zu schätzen, die benötigt wird, bis sich der PSA-Wert verdoppelt. Er berechnet die Wachstumsrate und daraus die Verdopplungszeit.</p>
+        <p>Zusätzlich wird ein gleitender Durchschnitt der Verdopplungszeit berechnet und im Diagramm angezeigt, um Trends besser zu erkennen. Je mehr Messwerte Sie eingeben, desto genauer wird die Berechnung.</p>
+    </section>
 
-    <div class="section">
-        <h2>Funktionen</h2>
-
-        <h3>1. Patientendaten</h3>
-        <ul>
-            <li>Eingabe von Vor- und Nachname</li>
-            <li>Erfassung von Geburtsdatum</li>
-            <li>Dokumentation des OP-Datums</li>
-            <li>Daten erscheinen als Überschrift im Diagramm</li>
-        </ul>
-
-        <h3>2. PSA-Messungen</h3>
-        <ul>
-            <li>Eingabe von zwei PSA-Messungen mit Datum</li>
-            <li>Möglichkeit für Notizen zu jeder Messung</li>
-            <li>Automatische Berechnung der Verdopplungszeit</li>
-            <li>Werte werden in der Tabelle gespeichert</li>
-        </ul>
-
-        <h3>3. Visualisierung</h3>
-        <ul>
-            <li>Grafische Darstellung der PSA-Werte</li>
-            <li>Anzeige der Verdopplungszeiten</li>
-            <li>Interaktive Tooltips mit allen Informationen</li>
-            <li>Übersichtliche Darstellung des Verlaufs</li>
-        </ul>
-
-        <h3>4. Datenverwaltung</h3>
-        <ul>
-            <li>Speichern der Daten als JSON-Datei</li>
-            <li>Laden gespeicherter Daten</li>
-            <li>Bearbeitung der Werte in der Tabelle</li>
-            <li>Löschen einzelner Messungen</li>
-        </ul>
-
-        <h3>5. Benutzeroberfläche</h3>
-        <ul>
-            <li>Dark Mode für bessere Lesbarkeit</li>
-            <li>Übersichtliche Gruppierung der Eingabefelder</li>
-            <li>Responsive Design</li>
-            <li>Klare Farbkodierung</li>
-        </ul>
-    </div>
-
-    <div class="section">
-        <h2>Bedienung</h2>
-
-        <h3>1. Neue Messung hinzufügen:</h3>
-        <ul>
-            <li>Patientendaten eingeben (optional)</li>
-            <li>Datum und PSA-Wert der ersten Messung eingeben</li>
-            <li>Datum und PSA-Wert der zweiten Messung eingeben</li>
-            <li>Optional Notizen zu den Messungen hinzufügen</li>
-            <li>"Berechnen" klicken</li>
-        </ul>
-
-        <h3>2. Daten verwalten:</h3>
-        <ul>
-            <li>"Speichern" zum Exportieren der Daten</li>
-            <li>"Laden" zum Importieren gespeicherter Daten</li>
-            <li>Werte in der Tabelle können direkt bearbeitet werden</li>
-            <li>Messungen können über das X-Symbol gelöscht werden</li>
-        </ul>
-
-        <h3>3. Visualisierung:</h3>
-        <ul>
-            <li>Graph zeigt PSA-Verlauf und Verdopplungszeiten</li>
-            <li>Mit der Maus über Datenpunkte fahren für Details</li>
-            <li>Dark Mode über den Schalter rechts oben umschaltbar</li>
-        </ul>
-    </div>
-
-    <div class="section">
-        <h2>Berechnungsmethode</h2>
-        <p>Die Verdopplungszeit wird nach folgender Formel berechnet:</p>
+    <section>
+        <h2>Bedienungsanleitung</h2>
         <ol>
-            <li>Zeitdifferenz in Monaten zwischen den Messungen</li>
-            <li>Wachstumsrate = ln(PSA2/PSA1) / Zeitdifferenz</li>
-            <li>Verdopplungszeit = ln(2) / Wachstumsrate</li>
+            <li>
+                <strong>Patientendaten eingeben:</strong>
+                <ul>
+                    <li>Geben Sie im Bereich "Patientendaten" den Vornamen, Nachnamen, das Geburtsdatum und gegebenenfalls das Datum der Operation (OP-Datum) des Patienten ein. Diese Informationen dienen zur Identifizierung und Dokumentation.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>PSA-Messwerte eingeben:</strong>
+                <ul>
+                    <li>
+                        <strong>Erste Messung:</strong> Geben Sie im Bereich "Erste Messung" das Datum der ersten PSA-Messung und den zugehörigen PSA-Wert ein. Sie können optional eine Notiz hinzufügen, um besondere Umstände oder Beobachtungen festzuhalten.
+                    </li>
+                    <li>
+                        <strong>Zweite Messung:</strong> Geben Sie im Bereich "Zweite Messung" das Datum der zweiten PSA-Messung und den zugehörigen PSA-Wert ein. Auch hier können Sie eine Notiz hinzufügen.
+                    </li>
+                    <li>Für eine genauere Analyse empfiehlt es sich, weitere Messwerte in die Tabelle einzutragen (siehe Abschnitt "Tabelle bearbeiten").</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Berechnung starten:</strong>
+                <ul>
+                    <li>Klicken Sie auf den "Berechnen"-Button, um die PSA-Verdopplungszeit basierend auf den eingegebenen Werten zu berechnen.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Ergebnisse anzeigen:</strong>
+                <ul>
+                    <li>
+                        <strong>Verdopplungszeit:</strong> Die berechnete PSA-Verdopplungszeit in Monaten wird unterhalb des "Berechnen"-Buttons angezeigt.
+                    </li>
+                    <li>
+                        <strong>Tabelle:</strong> Eine Tabelle zeigt alle eingegebenen Messwerte (Datum, PSA-Wert, Notiz) sowie die berechnete Verdopplungszeit zwischen den Messungen.
+                    </li>
+                    <li>
+                        <strong>Diagramm:</strong> Ein Liniendiagramm visualisiert die PSA-Werte im Zeitverlauf. Zusätzlich wird ein gleitender Durchschnitt der Verdopplungszeit angezeigt, um Trends zu erkennen.
+                    </li>
+                </ul>
+            </li>
         </ol>
-    </div>
+    </section>
 
-    <div class="section">
-        <h2>Technische Hinweise</h2>
+    <section>
+        <h2>Funktionen im Detail</h2>
         <ul>
-            <li>Die Daten werden im JSON-Format gespeichert</li>
-            <li>Die JSON-Datei kann auch extern bearbeitet werden</li>
-            <li>Alle Berechnungen erfolgen clientseitig</li>
-            <li>Keine Daten werden an Server übermittelt</li>
+            <li>
+                <strong>PSA-Verdopplungszeit berechnen:</strong>
+                <ul>
+                    <li>Berechnet die Zeit, in der sich der PSA-Wert ausgehend von zwei Messpunkten verdoppelt.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Daten speichern:</strong>
+                <ul>
+                    <li>Speichert die eingegebenen Patientendaten und Messwerte im JSON-Format, um sie später wieder laden zu können.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Daten laden:</strong>
+                <ul>
+                    <li>Lädt zuvor gespeicherte Patientendaten und Messwerte aus einer JSON-Datei.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Diagramm:</strong>
+                <ul>
+                    <li>Zeigt die PSA-Werte und den gleitenden Durchschnitt der Verdopplungszeit als Liniendiagramm an, um den Verlauf visuell darzustellen.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Gleitender Durchschnitt:</strong>
+                <ul>
+                    <li>Berechnet und visualisiert den gleitenden Durchschnitt der Verdopplungszeit über einen Zeitraum von 3 Messwerten. Dies hilft, langfristige Trends besser zu erkennen und kurzfristige Schwankungen auszugleichen.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Tabelle bearbeiten:</strong>
+                <ul>
+                    <li>
+                        <strong>Messwerte hinzufügen:</strong> Um weitere Messwerte hinzuzufügen, füllen Sie die Felder "Erste Messung" und "Zweite Messung" aus und klicken Sie auf "Berechnen". Die neuen Werte werden automatisch zur Tabelle hinzugefügt.
+                    </li>
+                    <li>
+                        <strong>Messwerte bearbeiten:</strong> Sie können die Werte in der Tabelle direkt bearbeiten, indem Sie auf die entsprechenden Felder klicken und die neuen Werte eingeben. Die Verdopplungszeit und das Diagramm werden automatisch aktualisiert.
+                    </li>
+                    <li>
+                        <strong>Messwerte löschen:</strong> Jeder Eintrag in der Tabelle hat einen "×"-Button. Klicken Sie darauf, um den entsprechenden Messwert zu löschen. Die Verdopplungszeit und das Diagramm werden automatisch aktualisiert.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <strong>Dark Mode:</strong>
+                <ul>
+                    <li>
+                        <strong>Umschalten:</strong> Aktivieren Sie den Schalter in der Navigationsleiste, um zwischen dem hellen und dem dunklen Design zu wechseln. Der Dark Mode verbessert die Lesbarkeit bei schlechten Lichtverhältnissen und reduziert die Belastung für die Augen.
+                    </li>
+                    <li>
+                        <strong>Automatische Anpassung:</strong> Die Farben des Diagramms und der Benutzeroberfläche werden automatisch an das gewählte Design angepasst.
+                    </li>
+                </ul>
+            </li>
         </ul>
-    </div>
+    </section>
 
-    <script>
-        // Dark Mode Toggle Funktionalität
-        const toggleSwitch = document.querySelector('#checkbox');
-        const currentTheme = localStorage.getItem('theme');
-
-        if (currentTheme) {
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            if (currentTheme === 'dark') {
-                toggleSwitch.checked = true;
-            }
-        }
-
-        function switchTheme(e) {
-            if (e.target.checked) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-            }
-        }
-
-        toggleSwitch.addEventListener('change', switchTheme, false);
-    </script>
+    <section class="hinweis">
+        <h2>Wichtiger Hinweis</h2>
+        <p>Dieser Rechner dient nur zu Informationszwecken und ersetzt keine ärztliche Beratung. Die Ergebnisse sollten immer mit einem qualifizierten Arzt besprochen werden, um eine fundierte Entscheidung über die Behandlung zu treffen.</p>
+    </section>
 </body>
-</html> 
+
+</html>

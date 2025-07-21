@@ -1,9 +1,9 @@
 {
   "patient": {
-    "vorname": "Beispiel Vorname",
-    "nachname": "Beispiel Nachname",
-    "geburtsdatum": "1966-05-31",
-    "opDatum": "2018-06-30"
+    "vorname": "Volker",
+    "nachname": "Behrens",
+    "geburtsdatum": "1965-04-10",
+    "opDatum": "2017-08-28"
   },
   "messungen": [
     {
@@ -57,7 +57,7 @@
       "notiz1": "Nadir nach OP in der Reha",
       "datum2": "2019-07-15",
       "wert2": 0.11,
-      "notiz2": "IMRT ",
+      "notiz2": "IMRT in Ludwigshafen",
       "verdopplungszeit": "8.95"
     },
     {
@@ -259,13 +259,22 @@
       "verdopplungszeit": "17.42"
     },
     {
-      "datum1": "",
-      "wert1": null,
-      "notiz1": "",
-      "datum2": "",
-      "wert2": null,
+      "datum1": "2017-09-17",
+      "wert1": 0.02,
+      "notiz1": "Nadir nach OP in der Reha",
+      "datum2": "2025-05-12",
+      "wert2": 0.63,
+      "notiz2": "fällt",
+      "verdopplungszeit": "18.48"
+    },
+    {
+      "datum1": "2017-09-17",
+      "wert1": 0.02,
+      "notiz1": "Nadir nach OP in der Reha",
+      "datum2": "2025-08-18",
+      "wert2": 0.7,
       "notiz2": "",
-      "verdopplungszeit": "NaN"
+      "verdopplungszeit": "18.52"
     }
   ]
 }
