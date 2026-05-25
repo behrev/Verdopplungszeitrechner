@@ -8,7 +8,8 @@
 ## Überblick
 
 Der PSA Verdopplungszeitrechner ist ein Tool zur Berechnung und Visualisierung von PSA-Werten und deren Verdopplungszeiten.
-Funktionen
+
+## Funktionen
 
 ## 1. Patientendaten
 
