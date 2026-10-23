@@ -7,7 +7,9 @@
 
 ## Überblick
 
-Der PSA Verdopplungszeitrechner ist ein Tool zur Berechnung und Visualisierung von PSA-Werten und deren Verdopplungszeiten.
+Der PSA Verdopplungszeitrechner ist ein Tool zur Berechnung und Visualisierung von PSA-Werten und deren Verdopplungszeiten von einem ersten Datum aus in die Zukunft. Das Tool läuft im Browser und alle Werte die eingegeben wurden, können in einer .json Datei abgespeichert werden. Diese Datei bekommt den Namen und das Geburtsdatum aus den Werten in der Eingabemaske und wird in den Downloads-Ordner exportiert. Nach einem Neustart kann die .json wieder importiert werden.
+
+Wird das Tool auf einem Webserver installiert, kann die .json Datei in ***default.json*** umbenannt werden und wird beim Aufrufen der ***Index.html*** direkt mit geladen.
 
 ## Funktionen
 
@@ -24,10 +26,12 @@ Der PSA Verdopplungszeitrechner ist ein Tool zur Berechnung und Visualisierung v
     Möglichkeit für Notizen zu jeder Messung
     Automatische Berechnung der Verdopplungszeit
     Werte werden in der Tabelle gespeichert
+    Die erste Messung sollte immer das gleiche Datum 
+    haben, um eine Langzeit Trendlinie zu erhalten
 
 ## 3. Visualisierung
 
-    Grafische Darstellung der PSA-Werte
+    Grafische Darstellung der PSA-Werte als Trendlinie
     Anzeige der Verdopplungszeiten
     Interaktive Tooltips mit allen Informationen
     Übersichtliche Darstellung des Verlaufs
@@ -35,26 +39,27 @@ Der PSA Verdopplungszeitrechner ist ein Tool zur Berechnung und Visualisierung v
 ## 4. Datenverwaltung
 
     Speichern der Daten als JSON-Datei
-    Laden gespeicherter Daten
+    Laden vorher gespeicherter Daten
     Bearbeitung der Werte in der Tabelle
-    Löschen einzelner Messungen
+    Löschen und zufügen einzelner Messungen
 
 ## 5. Benutzeroberfläche
 
     Dark Mode für bessere Lesbarkeit
     Übersichtliche Gruppierung der Eingabefelder
     Responsive Design
-    Klare Farbkodierung
+    Mehrere Farbkodierungen der Trendlinie
 
 # Bedienung
 
 ## 1. Neue Messung hinzufügen:
 
-    Patientendaten eingeben (optional)
+    Patientendaten eingeben (ergeben den Dateinahmen der .json)
     Datum und PSA-Wert der ersten Messung eingeben
     Datum und PSA-Wert der zweiten Messung eingeben
     Optional Notizen zu den Messungen hinzufügen
     "Berechnen" klicken
+    Danach können weitere Werte eingegeben werden
 
 ## 2. Daten verwalten:
 
